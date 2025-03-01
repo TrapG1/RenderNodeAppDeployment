@@ -1,0 +1,34 @@
+# Ignore the node_modules directory
+node_modules/
+
+# Ignore environment variables file
+.env
+
+# Ignore npm debug logs
+npm-debug.log
+
+# Ignore build/output directories
+dist/
+build/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
+
+# Ignore dependency directories
+jspm_packages/
+
+# Ignore TypeScript output
+*.js.map
+*.tsbuildinfo
+
+# Ignore logs and databases
+*.log
+*.sqlite
+
+# Ignore coverage reports
+coverage/
