@@ -1,8 +1,11 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors');
+
 const app = express()
 
 app.use(express.json())
+app.use(cors());
 // Create a custom Morgan token for logging POST data
 morgan.token('post-data', (req, res) => {
     // Only log the data if the method is POST and there is a body
@@ -75,7 +78,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     let id = String(request.params.id)
-    persons = persons.filter(person => person.id !== id) // Fix: Assign back to `persons`
+    persons = persons.filter(person => person.id !== id) 
     response.status(204).end()
 })
 
@@ -110,7 +113,32 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
 })
 
-const PORT = 3001
+app.put('/api/persons/:id', (request, response) => {
+    const id = String(request.params.id)
+    const personBody = request.body
+    console.log(id)
+    
+    if (!personBody.name || !personBody.number) {
+        return response.status(400).json({ error: 'name or number missing' })
+    }
+
+    const personIndex = persons.findIndex(person => person.id === id)
+    if (personIndex === -1) {
+        return response.status(404).json({ error: 'person not found' })
+    }
+
+
+    //merges old attributes with new
+    const updatedPerson = { ...persons[personIndex], ...personBody }
+
+    //replaces old with updated
+    persons[personIndex] = updatedPerson
+
+    response.json(updatedPerson)
+})
+
+
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
