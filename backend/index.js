@@ -1,11 +1,21 @@
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors');
+import express from 'express'
+import morgan from 'morgan' 
+import cors from 'cors'
+
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express()
 
 app.use(express.json())
 app.use(cors());
+
+
+// Get the directory path correctly
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+
 // Create a custom Morgan token for logging POST data
 morgan.token('post-data', (req, res) => {
     // Only log the data if the method is POST and there is a body
@@ -137,6 +147,12 @@ app.put('/api/persons/:id', (request, response) => {
     response.json(updatedPerson)
 })
 
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// Serve frontend on any unknown routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+});
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
