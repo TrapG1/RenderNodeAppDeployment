@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/persons';
+const baseUrl = 'https://rendernodeappdeployment.onrender.com';
 
 
 //js file to communitcate with phonebook database
