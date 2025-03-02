@@ -1,17 +1,41 @@
+import dotenv from 'dotenv'
 import express from 'express'
 import morgan from 'morgan' 
 import cors from 'cors'
-
+import mongoose from "mongoose"
 import path from "path";
 import { fileURLToPath } from "url";
-
+//loads envs from .env file for use
+dotenv.config()
 const app = express()
 
 app.use(express.json())
 app.use(cors());
 
+//connects backend to mongodb via mongoose
+const password = process.argv[2]
+const url = `mongodb+srv://chanulpiyadi:${[password]}@cluster0.7youn.mongodb.net/phonebookApp?retryWrites=true&w=majority&appName=Cluster0`
 
-// Get the directory path correctly
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: Number,
+})
+
+const Person = mongoose.model('person', personSchema)
+
+personSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString()
+      delete returnedObject._id
+      delete returnedObject.__v
+    }
+})
+
+//meta is the info about a js file, we get the file//.. path of indexjs, covert it to url
+//and use it to get the dirname (backend)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -63,7 +87,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -147,6 +173,7 @@ app.put('/api/persons/:id', (request, response) => {
     response.json(updatedPerson)
 })
 
+//use dir (backed) to find root and get dist folder (done by .static middleware)
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // Serve frontend on any unknown routes
