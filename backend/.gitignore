@@ -7,9 +7,6 @@ node_modules/
 # Ignore npm debug logs
 npm-debug.log
 
-# Ignore build/output directories
-dist/
-build/
 
 # Ignore OS-specific files
 .DS_Store

@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001/api/persons';
+const baseUrl = 'https://rendernodeappdeployment.onrender.com/api/persons';
 
 
 //js file to communitcate with phonebook database
