@@ -1,5 +1,5 @@
 {
-  "name": "phonebook",
+  "name": "phonebook-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,9 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "concurrently \"npm run server-dev\" \"npm run client\"",
-    "server-dev": "cd ../backend && npm run dev",
-    "server": "node ../backend/index.js",
+    "start": "vite",
     "client": "vite"
   },
   "dependencies": {
@@ -24,7 +22,6 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
-    "concurrently": "^9.1.2",
     "eslint": "^9.21.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.0.0",
