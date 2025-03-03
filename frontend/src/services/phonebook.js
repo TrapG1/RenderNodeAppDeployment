@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://rendernodeappdeployment.onrender.com/api/persons';
+const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:3001/api/persons';
 
 
 //js file to communitcate with phonebook database

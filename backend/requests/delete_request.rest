@@ -2,10 +2,10 @@ DELETE http://localhost:3001/api/persons/1
 
 ###
 
-POST https://rendernodeappdeployment.onrender.com/api/persons
+POST http://localhost:3001/api/persons/
 Content-Type: application/json
 
 {
-    "name": "Max",
-    "number": "123"
+    "name": "adam",
+    "number": "456"
 }

@@ -1,13 +1,12 @@
-import mongoose from "mongoose"
 import dotenv from 'dotenv'
 
 dotenv.config()
+import mongoose from "mongoose"
 mongoose.set('strictQuery',false)
 
 
-const password = process.argv[2]
 const url = process.env.MONGODB_URI
-
+console.log(url)
 console.log('conntecting to', url)
 
 mongoose.connect(url)
@@ -19,9 +18,10 @@ mongoose.connect(url)
     })
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: Number,
+  name: { type: String, unique: true, required: true },
+  number: { type: Number, required: true }
 })
+  
 
 export const Person = mongoose.model('person', personSchema)
 
