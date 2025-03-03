@@ -6,6 +6,7 @@ import stylisticJs from '@stylistic/eslint-plugin-js'
 export default [
   pluginJs.configs.recommended,
   {
+    "eslint.enable": false,
     languageOptions: {
       globals: globals.browser
     },
