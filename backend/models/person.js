@@ -10,6 +10,10 @@ const personSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 personSchema.set('toJSON', {
@@ -20,4 +24,5 @@ personSchema.set('toJSON', {
   },
 });
 
-export default mongoose.model('Person', personSchema);
+const Person = mongoose.model('Person', personSchema);
+export default Person
