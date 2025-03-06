@@ -3,6 +3,9 @@ import Filter from './Components/Filter';
 import PersonForm from './Components/PersonForm';
 import Persons from './Components/Persons';
 import phonebook from './services/phonebook';
+import login from './services/login';
+import LoginForm from './Components/LoginForm';
+import Login from './services/login';
 
 
 const App = () => {
@@ -10,6 +13,10 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newFilter, setNewFilter] = useState('');
+  const [username, setUsername] = useState('') 
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null) 
+  const [errorMessage, setErrorMessage] = useState('')
 
   //once we get a response, make it the persons array, this will rerender the page
   useEffect(()=>{
@@ -20,6 +27,7 @@ const App = () => {
             setPersons([])
           })
   },[])
+
 
   //only once we get a response, which is the person obj with the same details (but server)
   //chosen id, it will add it to the persons array, rerendering the page. only adding after getting
@@ -73,7 +81,7 @@ const App = () => {
   function updateFilter(filter){
     setNewFilter(filter)
   }
-  
+
   // Filtered list of persons based on `newFilter`
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(newFilter.toLowerCase())
@@ -82,14 +90,37 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter updateFilter = {updateFilter} newFilter = {newFilter}/>
-
-      <PersonForm  newName ={newName} newPhone ={newPhone} updateName={updateName} updateNumber={updateNumber} persons={persons} addPerson={addPerson} updateExistingPerson = {updateExistingPerson}/>
-      
-      <h2>Numbers</h2>
-      <Persons filteredPersons ={filteredPersons} deletePerson={deletePerson}/>
+      {user === null ? (
+        <LoginForm 
+          setErrorMessage={setErrorMessage} 
+          setUsername={setUsername} 
+          setPassword={setPassword} 
+          setUser={setUser} 
+          username={username} 
+          password={password}
+        />
+      ) : (
+        <>
+          <Filter updateFilter={updateFilter} newFilter={newFilter} />
+  
+          <PersonForm  
+            newName={newName} 
+            newPhone={newPhone} 
+            updateName={updateName} 
+            updateNumber={updateNumber} 
+            persons={persons} 
+            addPerson={addPerson} 
+            updateExistingPerson={updateExistingPerson}
+          />
+          
+          <h2>Numbers</h2>
+          
+          <Persons filteredPersons={filteredPersons} deletePerson={deletePerson} />
+        </>
+      )}
     </div>
   );
+  
 };
 
 export default App;

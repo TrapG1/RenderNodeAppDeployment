@@ -3,19 +3,20 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-      "start": "node backend/index.js",
-      "server": "dotenv -e backend/.env -- node backend/index.js",
-      "build": "npm run build-backend && npm run build-frontend",
-      "build-backend": "cd backend && npm install",
-      "build-frontend": "cd frontend && npm install && npm run build",
-      "dev": "concurrently \"npm run server\" \"npm run client\"",
-      "client": "cd frontend && npm start",
-      "postinstall": "cd backend && npm install && cd ../frontend && npm install"
+        "start": "node backend/index.js",
+        "server": "dotenv -e backend/.env -- nodemon backend/index.js",
+        "build": "npm run build-backend && npm run build-frontend",
+        "build-backend": "cd backend && npm install",
+        "build-frontend": "cd frontend && npm install && npm run build",
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "client": "cd frontend && npm start",
+        "postinstall": "cd backend && npm install && cd ../frontend && npm install"
     },
     "dependencies": {
         "concurrently": "^9.1.2"
     },
     "devDependencies": {
-        "dotenv-cli": "^8.0.0"
+        "dotenv-cli": "^8.0.0",
+        "nodemon": "^3.1.9"
     }
 }
