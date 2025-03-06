@@ -7,11 +7,11 @@ GET http://localhost:3001/api/persons/
 ### Add a person to the first user (root)
 POST http://localhost:3001/api/persons/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3YzhlNDc2ZjRhNjU4YWYwMWI0YjE1MCIsImlhdCI6MTc0MTIyMzk4OX0.yTpFRV0aM84hHTC8_MT6NcXG7SI-B9qgDY6h0-YZh9c
 
 {
-  "name": "Alice",
-  "number": "123456789",
-  "userId": "67c8e476f4a658af01b4b150"
+  "name": "TOKENCHECK",
+  "number": "444444"
 }
 
 ### Add first person to second user (john_doe)
