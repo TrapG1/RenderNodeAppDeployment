@@ -3,6 +3,7 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import personsRouter from './controllers/persons.js'
 import userRouter from './controllers/users.js'
+import loginRouter from './controllers/login.js'
 import middleware from './utils/middleware.js'
 import {info, error} from './utils/logger.js'
 import {MONGODB_URI} from './utils/config.js'
@@ -39,7 +40,9 @@ app.use(middleware.requestLogger)  // Custom request logging middleware
 // Define routes using the imported router
 app.use('/api/persons', personsRouter)
 app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
 
+app.use(middleware.errorHandler)
 // Handle unknown endpoints
 app.use(middleware.unknownEndpoint)
 

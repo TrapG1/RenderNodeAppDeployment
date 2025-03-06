@@ -22,11 +22,16 @@ userRouter.post('/', async (request, response, next) => {
       response.status(201).json(savedUser)
   
     } catch (error) {
-        console.error(error)
       // If error is not handled elsewhere (e.g., unique constraint violation)
-      next(error) // Pass to error handling middleware
+        next(error) // Pass to error handling middleware
     }
 })
-  
+
+userRouter.get('/', async (request, response) => {
+  const users = await User
+    //replaces the objectids in people part with refferncing people documents
+    .find({}).populate('people', {name:1, number:1})
+  response.json(users)
+})  
 
 export default userRouter

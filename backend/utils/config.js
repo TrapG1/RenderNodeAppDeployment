@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT;
-
+const SECRET = process.env.SECRET
 //use testing db not actual db
 const MONGODB_URI = process.env.NODE_ENV === 'test'
     ? process.env.TEST_MONGODB_URI
@@ -11,5 +11,6 @@ const MONGODB_URI = process.env.NODE_ENV === 'test'
 
 export {
   MONGODB_URI,
-  PORT
+  PORT,
+  SECRET
 };

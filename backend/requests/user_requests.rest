@@ -1,0 +1,29 @@
+### Create user 1
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "root",
+    "name": "Superuser",
+    "password": "salainen"
+}
+
+### Create user 2
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "john_doe",
+    "name": "John Doe",
+    "password": "password123"
+}
+
+### Create user 3
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "jane_doe",
+    "name": "Jane Doe",
+    "password": "securepass"
+}

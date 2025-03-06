@@ -1,0 +1,76 @@
+# GET all persons
+GET http://localhost:3001/api/persons/
+
+###
+
+# POST a new person
+### Add a person to the first user (root)
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "number": "123456789",
+  "userId": "67c8e476f4a658af01b4b150"
+}
+
+### Add first person to second user (john_doe)
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Bob",
+  "number": "987654321",
+  "userId": "67c8e479f4a658af01b4b152"
+}
+
+### Add second person to second user (john_doe)
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Charlie",
+  "number": "555666777",
+  "userId": "67c8e479f4a658af01b4b152"
+}
+
+### Add first person to third user (jane_doe)
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "David",
+  "number": "111222333",
+  "userId": "67c8e47bf4a658af01b4b154"
+}
+
+### Add second person to third user (jane_doe)
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+  "name": "Eve",
+  "number": "444555666",
+  "userId": "67c8e47bf4a658af01b4b154"
+}
+
+###
+
+# GET a person by ID
+GET http://localhost:3001/api/persons/67c41b25ea9d8d390c3dba12
+
+###
+
+# PUT (update) a person by ID
+PUT http://localhost:3001/api/persons/67c41b25ea9d8d390c3dba12
+Content-Type: application/json
+
+{
+  "name": "Updated Name",
+  "number": "123456789"
+}
+
+###
+
+# DELETE a person by ID
+DELETE http://localhost:3001/api/persons/67c57c98a3e98ac51f74a9e6

@@ -35,6 +35,8 @@ describe('when there is initially one user in db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
+    console.log("YOO")
+    console.log(result.body.error)
     const usersAtEnd = await usersInDb()
     assert(result.body.error.includes('expected `username` to be unique'))
 
