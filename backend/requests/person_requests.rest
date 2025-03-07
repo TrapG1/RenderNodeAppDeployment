@@ -3,6 +3,9 @@ GET http://localhost:3001/api/persons/
 
 ###
 
+Get http://localhost:3001/api/persons/user/67c8e476f4a658af01b4b150
+
+
 # POST a new person
 ### Add a person to the first user (root)
 POST http://localhost:3001/api/persons/

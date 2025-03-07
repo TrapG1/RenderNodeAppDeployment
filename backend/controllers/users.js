@@ -34,4 +34,24 @@ userRouter.get('/', async (request, response) => {
   response.json(users)
 })  
 
+
+// Get persons belonging to the authenticated user
+userRouter.get('/persons', async (req, res, next) => {
+  try {
+    // Access user from the token (req.user is populated by the tokenExtractor)
+    const user = await User.findById(req.user.id).populate('people', { name: 1, number: 1 });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Send the list of persons associated with the user
+    res.json(user.people);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
 export default userRouter

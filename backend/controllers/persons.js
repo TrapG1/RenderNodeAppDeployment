@@ -9,15 +9,6 @@ import { SECRET } from '../utils/config.js';
 
 const personsRouter = express.Router();
 
-//returns either null or the token key from the authorization header of req
-const getTokenFrom = (request) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  console.log('helo')
-  return null
-}
 
 //the req is sent to the specific route after running through middleware in app.js
 personsRouter.get('/', async (req, res, next) => {
@@ -45,19 +36,15 @@ personsRouter.get('/:id', async (req, res, next) => {
 
 personsRouter.post('/', async (req, res, next) => {
   try {
+
+    const user = await User.findById(req.user.id)
+
     const { name, number} = req.body;
-    //decodes token to get username and id, if fails raise error
-    const decodedToken = jwt.verify(getTokenFrom(req), SECRET)
-    if (!decodedToken.id) {
-      return res.status(401).json({ error: 'token invalid' })
-    }
-    const user = await User.findById(decodedToken.id)
 
     if (!user) {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
     
-    console.log(user)
     const person = new Person({ name, number, user: user._id });
     const savedPerson = await person.save();
     user.people = user.people.concat(savedPerson._id)

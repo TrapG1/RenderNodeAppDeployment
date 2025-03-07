@@ -36,11 +36,15 @@ app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())  // Parse incoming JSON requests
 app.use(middleware.requestLogger)  // Custom request logging middleware
+app.use('/api/login', loginRouter)
+
+app.use(middleware.tokenExtractor)
+
 
 // Define routes using the imported router
 app.use('/api/persons', personsRouter)
 app.use('/api/users', userRouter)
-app.use('/api/login', loginRouter)
+
 
 app.use(middleware.errorHandler)
 // Handle unknown endpoints

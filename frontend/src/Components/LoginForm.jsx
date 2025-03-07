@@ -1,5 +1,5 @@
 import login from "../services/login.js"
-import phonebook from "../services/phonebook.js" 
+import personsComm from "../services/personsComm.js"
 
 export default function LoginForm({ setUsername, setPassword, setUser, username, password, setErrorMessage }) {
     const handleLogin = async (event) => {
@@ -11,7 +11,7 @@ export default function LoginForm({ setUsername, setPassword, setUser, username,
             window.localStorage.setItem(
                 'loggedPhonebookAppUser', JSON.stringify(user)
             )
-            phonebook.setToken(user.token)
+            personsComm.setToken(user.token)
             setUser(user)
             setUsername('')
             setPassword('')

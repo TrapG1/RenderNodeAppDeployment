@@ -27,3 +27,9 @@ Content-Type: application/json
     "name": "Jane Doe",
     "password": "securepass"
 }
+
+###
+GET http://localhost:3001/api/users/persons
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3YzhlNDc2ZjRhNjU4YWYwMWI0YjE1MCIsImlhdCI6MTc0MTMxMzkyNCwiZXhwIjoxNzQxMzE3NTI0fQ.bUf9LvJKwUuyNfueuNOhq_nCmlAchZDgpHFSUviRNn0
+
+

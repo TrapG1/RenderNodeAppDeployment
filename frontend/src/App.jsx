@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import Filter from './Components/Filter';
 import PersonForm from './Components/PersonForm';
 import Persons from './Components/Persons';
-import phonebook from './services/phonebook';
+import personsComm from './services/personsComm';
+import users from './services/usersComm';
 import login from './services/login';
 import LoginForm from './Components/LoginForm';
 import Login from './services/login';
 
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '123-456' }]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newPhone, setNewPhone] = useState('');
   const [newFilter, setNewFilter] = useState('');
@@ -18,66 +19,81 @@ const App = () => {
   const [user, setUser] = useState(null) 
   const [errorMessage, setErrorMessage] = useState('')
 
+  //functions use await to pause execution until persons.js returns the actual data 
+
   //once we get a response, make it the persons array, this will rerender the page
-  useEffect(()=>{
-    phonebook.getAll()
-    .then(response => setPersons(response.data))
-        .catch(error =>{
-            console.error("error fetching data:", error)
-            setPersons([])
-          })
-  },[])
+  useEffect(() => {
+    const fetchPersons = async () => {
+      if (!user) return //dont run if user not logged in yet
+
+      try {
+        console.log(user.token)
+        const response = await users.getUserPersons(user.id);
+        setPersons(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setPersons([]);
+      }
+    };
+  
+    fetchPersons();
+  }, [user]);
+  
 
   useEffect(() =>{
     const loggedUserJson = window.localStorage.getItem('loggedPhonebookAppUser')
     if (loggedUserJson){
       const user = JSON.parse(loggedUserJson)
       setUser(user)
-      phonebook.setToken(user.token)
+      personsComm.setToken(user.token)
     }
   },[])
 
   //only once we get a response, which is the person obj with the same details (but server)
   //chosen id, it will add it to the persons array, rerendering the page. only adding after getting
   //a reponse ensures that the setpersons wont add nothing when the promise isnt fulfilled. 
-  function addPerson() {
-    phonebook.create({ name: newName, number: newPhone })
-    .then(response => {
-      setPersons((prevPersons) => [...prevPersons, response.data]);
+  async function addPerson() {
+    try {
+      const newPerson = { name: newName, number: newPhone };
+      const response = await personsComm.create(newPerson);
+      
+      setPersons((prevPersons) => [...prevPersons, response]);
       setNewName('');
       setNewPhone('');
-    })
-    .catch(error => {
-      console.error("error uploading new person", error);
-    });
+    } catch (error) {
+      console.error("Error uploading new person:", error);
+    }
   }
+  
 
   //if the user confirms the delete, then send the request once we get a response update the state
   //because there could have been an error, and showing the person removed in the frontend would be wrong
-  function deletePerson(id){
-    let personToDelete = persons.find(person => person.id ===id)
-    if(window.confirm(`Delete ${personToDelete}?`)){
-      phonebook.deletePerson(id)
-      .then(() => setPersons(prevPersons => prevPersons.filter((person) => person.id !== id)))
-      .catch((error) => {
+  async function deletePerson(id) {
+    const personToDelete = persons.find(person => person.id === id);
+    
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
+      try {
+        await personsComm.deletePerson(id);
+        setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
+      } catch (error) {
         console.error('Error deleting person:', error);
         alert('Failed to delete the person. Please try again.');
-      })
+      }
     }
-    
-  } 
+  }
+  
 
   //updates existing person obj in db, once positive response, update state for frontend. 
-  function updateExistingPerson(personID, newPerson){
-    phonebook.updatePerson(personID, newPerson)
-    .then(response => {
-      setPersons(prevPersons => prevPersons.map(person => person.id === personID ? response.data : person))
-    })
-    .catch((error) => {
+  async function updateExistingPerson(personID, newPerson) {
+    try {
+      const updatedPerson = await personsComm.updatePerson(personID, newPerson);
+      setPersons(prevPersons => prevPersons.map(person => person.id === personID ? updatedPerson : person));
+    } catch (error) {
       console.error('Error updating person:', error);
       alert('Failed to update the person number. Please try again.');
-    })
+    }
   }
+  
   function updateName(name){
     setNewName(name)
   }
