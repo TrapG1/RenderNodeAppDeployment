@@ -28,6 +28,14 @@ const App = () => {
           })
   },[])
 
+  useEffect(() =>{
+    const loggedUserJson = window.localStorage.getItem('loggedPhonebookAppUser')
+    if (loggedUserJson){
+      const user = JSON.parse(loggedUserJson)
+      setUser(user)
+      phonebook.setToken(user.token)
+    }
+  },[])
 
   //only once we get a response, which is the person obj with the same details (but server)
   //chosen id, it will add it to the persons array, rerendering the page. only adding after getting
