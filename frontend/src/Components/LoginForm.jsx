@@ -1,17 +1,19 @@
 import login from "../services/login.js"
-import personsComm from "../services/personsComm.js"
 
-export default function LoginForm({ setUsername, setPassword, setUser, username, password, setErrorMessage }) {
+
+export default function LoginForm({ setUsername, setPassword, setUser, username, password, setErrorMessage, setToken }) {
     const handleLogin = async (event) => {
         event.preventDefault()
         setErrorMessage('')  // Clear previous error messages
 
         try {
+            //login will send req to login url, which finds the user in the backend, if successfull
+            //it will return the username and a token for the user 
             const user = await login({ username, password })
             window.localStorage.setItem(
                 'loggedPhonebookAppUser', JSON.stringify(user)
             )
-            personsComm.setToken(user.token)
+            setToken(user.token)
             setUser(user)
             setUsername('')
             setPassword('')

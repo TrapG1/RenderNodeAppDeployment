@@ -1,5 +1,6 @@
 // utils/middleware.js
 import jwt from 'jsonwebtoken';
+import { SECRET } from './config.js';
 const requestLogger = (req, res, next) => {
     console.log('Method:', req.method);
     console.log('Path:', req.path);
@@ -22,7 +23,8 @@ const tokenExtractor = (req, res, next) => {
     if (authorization && authorization.startsWith('Bearer ')) {
       const token = authorization.replace('Bearer ', '');
       // Decode the token and verify it
-      jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+      jwt.verify(token, SECRET, (err, decodedToken) => {
+        //execute this callback function after vreification 
         if (err) {
           return res.status(401).json({ error: 'Token invalid or expired' });
         }

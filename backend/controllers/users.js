@@ -37,6 +37,7 @@ userRouter.get('/', async (request, response) => {
 
 // Get persons belonging to the authenticated user
 userRouter.get('/persons', async (req, res, next) => {
+  
   try {
     // Access user from the token (req.user is populated by the tokenExtractor)
     const user = await User.findById(req.user.id).populate('people', { name: 1, number: 1 });

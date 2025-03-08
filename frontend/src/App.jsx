@@ -17,6 +17,7 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null) 
+  const [token, setToken] =useState(null)
   const [errorMessage, setErrorMessage] = useState('')
 
   //functions use await to pause execution until persons.js returns the actual data 
@@ -27,9 +28,8 @@ const App = () => {
       if (!user) return //dont run if user not logged in yet
 
       try {
-        console.log(user.token)
-        const response = await users.getUserPersons(user.id);
-        setPersons(response.data);
+        const response = await users.getUserPersons(token);
+        setPersons(response);
       } catch (error) {
         console.error("Error fetching data:", error);
         setPersons([]);
@@ -45,7 +45,7 @@ const App = () => {
     if (loggedUserJson){
       const user = JSON.parse(loggedUserJson)
       setUser(user)
-      personsComm.setToken(user.token)
+      setToken(user.token)
     }
   },[])
 
@@ -119,6 +119,7 @@ const App = () => {
           setErrorMessage={setErrorMessage} 
           setUsername={setUsername} 
           setPassword={setPassword} 
+          setToken = {setToken}
           setUser={setUser} 
           username={username} 
           password={password}
