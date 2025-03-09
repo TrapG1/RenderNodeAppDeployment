@@ -36,9 +36,7 @@ personsRouter.get('/:id', async (req, res, next) => {
 
 personsRouter.post('/', async (req, res, next) => {
   try {
-
     const user = await User.findById(req.user.id)
-
     const { name, number} = req.body;
 
     if (!user) {
@@ -76,9 +74,17 @@ personsRouter.put('/:id', async (req, res, next) => {
 });
 
 personsRouter.delete('/:id', async (req, res, next) => {
-  const { id } = req.params;
+  //delete person then remove from it from beloning user 
+  const personId  = req.params.id;
+  const userId = req.user.id
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized: No user ID found" });
+  } 
+
   try {
-    await Person.findByIdAndDelete(id);
+    await Person.findByIdAndDelete(personId);
+    await User.findByIdAndUpdate(userId, {$pull :{persons: personId}})
     res.status(204).end();
   } catch (error) {
     next(error);  // Handle error

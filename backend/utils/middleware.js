@@ -19,7 +19,7 @@ const unknownEndpoint = (req, res) => {
 // decode token to identify the user that it belongs to 
 //and save that in the req to use in other middlewear/routers
 const tokenExtractor = (req, res, next) => {
-    const authorization = req.get('authorization');
+    const authorization = req.get('authorization');    
     if (authorization && authorization.startsWith('Bearer ')) {
       const token = authorization.replace('Bearer ', '');
       // Decode the token and verify it
@@ -29,6 +29,7 @@ const tokenExtractor = (req, res, next) => {
           return res.status(401).json({ error: 'Token invalid or expired' });
         }
         req.user = decodedToken; // Attach user info to req
+        
         next(); // Continue to the next middleware/route handler
       });
     } else {
@@ -38,24 +39,24 @@ const tokenExtractor = (req, res, next) => {
 
 
 const errorHandler = (error, req, res, next) => {
-    if (error.name === 'CastError') {
-        return res.status(400).send({ error: 'malformatted id' });
-    } else if (error.name === 'ValidationError') {
-        return res.status(400).json({ error: error.message });
-    } else if (error.code === 11000) {
-        return res.status(400).json({ error: 'expected `username` to be unique' })
-    } else if (error.name ===  'JsonWebTokenError') {
-        return res.status(401).json({ error: 'token invalid' })
-    } else if (error.name === 'TokenExpiredError') {
-        return response.status(401).json({
-          error: 'token expired'
-        })
-    }
-    
-    
-    res.status(500).send({ error: 'something went wrong' });
-    next(error);
+  if (error.name === 'CastError') {
+      return res.status(400).send({ error: 'malformatted id' });
+  } else if (error.name === 'ValidationError') {
+      return res.status(400).json({ error: error.message });
+  } else if (error.code === 11000) {
+      return res.status(400).json({ error: 'expected `username` to be unique' });
+  } else if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ error: 'token invalid' });
+  } else if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'token expired' });
+  } else if (error.message === 'Failed to delete person') {
+      return res.status(500).json({ error: 'Failed to delete person' });
+  }
+
+  res.status(500).send({ error: 'something went wrong' });
+  next(error);
 };
+
 
 // Export all middleware functions as a default export
 export default {

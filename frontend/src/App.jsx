@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Filter from './Components/Filter';
 import PersonForm from './Components/PersonForm';
 import Persons from './Components/Persons';
 import personsComm from './services/personsComm';
 import users from './services/usersComm';
-import login from './services/login';
 import LoginForm from './Components/LoginForm';
-import Login from './services/login';
+import Togglable from './Components/Togglable';
 
 
 const App = () => {
@@ -19,6 +18,8 @@ const App = () => {
   const [user, setUser] = useState(null) 
   const [token, setToken] =useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const personFormRef = useRef()
+
 
   //functions use await to pause execution until persons.js returns the actual data 
 
@@ -39,7 +40,7 @@ const App = () => {
     fetchPersons();
   }, [user]);
   
-
+  //will rerun everytime we refresh the tab
   useEffect(() =>{
     const loggedUserJson = window.localStorage.getItem('loggedPhonebookAppUser')
     if (loggedUserJson){
@@ -54,9 +55,10 @@ const App = () => {
   //a reponse ensures that the setpersons wont add nothing when the promise isnt fulfilled. 
   async function addPerson() {
     try {
+      personFormRef.current.toggleVisibility()
       const newPerson = { name: newName, number: newPhone };
-      const response = await personsComm.create(newPerson);
-      
+      const response = await personsComm.create(newPerson, token);
+      console.log(response)
       setPersons((prevPersons) => [...prevPersons, response]);
       setNewName('');
       setNewPhone('');
@@ -73,7 +75,7 @@ const App = () => {
     
     if (window.confirm(`Delete ${personToDelete.name}?`)) {
       try {
-        await personsComm.deletePerson(id);
+        await personsComm.deletePerson(id, token);
         setPersons(prevPersons => prevPersons.filter(person => person.id !== id));
       } catch (error) {
         console.error('Error deleting person:', error);
@@ -86,7 +88,7 @@ const App = () => {
   //updates existing person obj in db, once positive response, update state for frontend. 
   async function updateExistingPerson(personID, newPerson) {
     try {
-      const updatedPerson = await personsComm.updatePerson(personID, newPerson);
+      const updatedPerson = await personsComm.updatePerson(personID, newPerson, token);
       setPersons(prevPersons => prevPersons.map(person => person.id === personID ? updatedPerson : person));
     } catch (error) {
       console.error('Error updating person:', error);
@@ -94,49 +96,53 @@ const App = () => {
     }
   }
   
-  function updateName(name){
-    setNewName(name)
-  }
-
-  function updateNumber(number){
-    setNewPhone(number)
-  }
-
   function updateFilter(filter){
     setNewFilter(filter)
   }
 
+  function LogOutUser(){
+    setUser(null)
+    setToken(null)
+    window.localStorage.removeItem('loggedPhonebookAppUser')
+
+  }
   // Filtered list of persons based on `newFilter`
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(newFilter.toLowerCase())
   );
 
+
   return (
     <div>
       <h2>Phonebook</h2>
+      {user && <button onClick={LogOutUser}>Logout</button>}
       {user === null ? (
-        <LoginForm 
-          setErrorMessage={setErrorMessage} 
-          setUsername={setUsername} 
-          setPassword={setPassword} 
-          setToken = {setToken}
-          setUser={setUser} 
-          username={username} 
-          password={password}
-        />
+        <Togglable buttonLabel="Login">
+          <LoginForm 
+            setErrorMessage={setErrorMessage} 
+            setUsername={setUsername} 
+            setPassword={setPassword} 
+            setToken={setToken}
+            setUser={setUser} 
+            username={username} 
+            password={password} 
+          />
+        </Togglable>
+
       ) : (
         <>
           <Filter updateFilter={updateFilter} newFilter={newFilter} />
-  
-          <PersonForm  
-            newName={newName} 
-            newPhone={newPhone} 
-            updateName={updateName} 
-            updateNumber={updateNumber} 
-            persons={persons} 
-            addPerson={addPerson} 
-            updateExistingPerson={updateExistingPerson}
-          />
+          <Togglable buttonLabel="Add Person" ref={personFormRef}>
+            <PersonForm  
+              newName={newName} 
+              newPhone={newPhone} 
+              setNewName={setNewName} 
+              setNewPhone={setNewPhone} 
+              persons={persons} 
+              addPerson={addPerson} 
+              updateExistingPerson={updateExistingPerson}
+            />
+          </Togglable>
           
           <h2>Numbers</h2>
           

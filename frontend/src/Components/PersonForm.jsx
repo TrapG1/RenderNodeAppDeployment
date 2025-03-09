@@ -1,4 +1,6 @@
-export default function PersonForm({updateExistingPerson, newName, newPhone, updateName, updateNumber, persons, addPerson}){
+export default function PersonForm({updateExistingPerson, newName, newPhone, setNewName, setNewPhone, persons, addPerson}){
+
+  
     const handleSubmit = (e) => {
         e.preventDefault();
     
@@ -27,21 +29,13 @@ export default function PersonForm({updateExistingPerson, newName, newPhone, upd
 
     };
 
-    const handleChange = (e) => {
-        updateName(e.target.value);
-      };
-    
-      const handlePhoneChange = (e) => {
-        updateNumber(e.target.value);
-      };
-
     return(
         <form onSubmit={handleSubmit}>
             <div>
-                Name: <input name="name" id="name" value={newName} onChange={handleChange} />
+                Name: <input name="name" id="name" value={newName} onChange={({ target }) => setNewName(target.value)} />
             </div>
             <div>
-                Number: <input name="number" id="number" value={newPhone} onChange={handlePhoneChange} />
+                Number: <input name="number" id="number" value={newPhone} onChange={({ target }) => setNewPhone(target.value)} />
             </div>
             <div>
                 <button type="submit">Add</button>
