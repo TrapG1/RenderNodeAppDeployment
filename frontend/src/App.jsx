@@ -117,7 +117,7 @@ const App = () => {
       <h2>Phonebook</h2>
       {user && <button onClick={LogOutUser}>Logout</button>}
       {user === null ? (
-        <Togglable buttonLabel="Login">
+        <Togglable buttonLabel="Login" quitButtonLabel="Cancel">
           <LoginForm 
             setErrorMessage={setErrorMessage} 
             setUsername={setUsername} 
@@ -132,7 +132,7 @@ const App = () => {
       ) : (
         <>
           <Filter updateFilter={updateFilter} newFilter={newFilter} />
-          <Togglable buttonLabel="Add Person" ref={personFormRef}>
+          <Togglable buttonLabel="Add Person" quitButtonLabel="Cancel" ref={personFormRef}>
             <PersonForm  
               newName={newName} 
               newPhone={newPhone} 

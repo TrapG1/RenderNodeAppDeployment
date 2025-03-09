@@ -10,13 +10,17 @@
         "build-frontend": "cd frontend && npm install && npm run build",
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "client": "cd frontend && npm start",
-        "postinstall": "cd backend && npm install && cd ../frontend && npm install"
+        "postinstall": "cd backend && npm install && cd ../frontend && npm install",
+        "test": "playwright test",
+        "test:report": "playwright show-report"
     },
     "dependencies": {
-        "concurrently": "^9.1.2"
+        "concurrently": "^9.1.2",
+        "prop-types": "^15.8.1"
     },
     "devDependencies": {
         "dotenv-cli": "^8.0.0",
+        "eslint": "^9.22.0",
         "nodemon": "^3.1.9"
     }
 }
