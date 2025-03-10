@@ -6,7 +6,8 @@ const Togglable = forwardRef(({quitButtonLabel, buttonLabel, children }, refs) =
 
   //defines required props 
   Togglable.propTypes = {
-    buttonLabel: PropTypes.string.isRequired
+    buttonLabel: PropTypes.string.isRequired,
+    quitButtonLabel: PropTypes.string.isRequired
   }
   const toggleVisibility = () =>{
     setVisible(!visible)

@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import personsRouter from './controllers/persons.js'
 import userRouter from './controllers/users.js'
 import loginRouter from './controllers/login.js'
+import testingRouter from './controllers/testing.js'
 import middleware from './utils/middleware.js'
 import {info, error} from './utils/logger.js'
 import {MONGODB_URI} from './utils/config.js'
@@ -45,7 +46,10 @@ app.use(middleware.tokenExtractor)
 app.use('/api/persons', personsRouter)
 app.use('/api/users', userRouter)
 
-
+//router used for testing 
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter)
+}
 app.use(middleware.errorHandler)
 // Handle unknown endpoints
 app.use(middleware.unknownEndpoint)

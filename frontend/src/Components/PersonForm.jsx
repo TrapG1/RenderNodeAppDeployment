@@ -32,10 +32,10 @@ export default function PersonForm({updateExistingPerson, newName, newPhone, set
     return(
         <form onSubmit={handleSubmit}>
             <div>
-                Name: <input name="name" id="name" value={newName} onChange={({ target }) => setNewName(target.value)} />
+                Name: <input data-testid="name" name="name" id="name" value={newName} onChange={({ target }) => setNewName(target.value)} />
             </div>
             <div>
-                Number: <input name="number" id="number" value={newPhone} onChange={({ target }) => setNewPhone(target.value)} />
+                Number: <input data-testid="number" name="number" id="number" value={newPhone} onChange={({ target }) => setNewPhone(target.value)} />
             </div>
             <div>
                 <button type="submit">Add</button>

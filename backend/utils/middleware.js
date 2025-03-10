@@ -19,6 +19,13 @@ const unknownEndpoint = (req, res) => {
 // decode token to identify the user that it belongs to 
 //and save that in the req to use in other middlewear/routers
 const tokenExtractor = (req, res, next) => {
+  //requests that dont need token
+    if (req.method === 'POST' && req.path === '/api/users') {
+      return next();
+    }
+    else if (req.method === 'POST' && req.path === '/api/testing/reset') {
+      return next();
+    }
     const authorization = req.get('authorization');    
     if (authorization && authorization.startsWith('Bearer ')) {
       const token = authorization.replace('Bearer ', '');
